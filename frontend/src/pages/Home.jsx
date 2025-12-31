@@ -18,13 +18,10 @@ const Home = () => {
   const [sortBy, setSortBy] = useState('title');
   const [order, setOrder] = useState('asc');
 
+  // ✅ FIX: Only run once on mount
   useEffect(() => {
-    if (sortBy === 'title' && order === 'asc') {
-      fetchMovies(1);
-    } else {
-      fetchSortedMovies(sortBy, order, 1);
-    }
-  }, []);
+    fetchMovies(1);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSortChange = (e) => {
     const newSortBy = e.target.value;
