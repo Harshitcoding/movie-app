@@ -4,9 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 
-
 dotenv.config();
-
 
 connectDB();
 
@@ -19,22 +17,17 @@ app.use(cors({
   credentials: true
 }));
 
-app.options("*", cors());
-
 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/movies', require('./routes/movieRoutes'));
-
 
 app.get('/', (req, res) => {
   res.json({ message: 'Movie API is running...' });
 });
-
 
 app.use(notFound);
 app.use(errorHandler);
