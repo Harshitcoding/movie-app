@@ -1,9 +1,9 @@
 import api from './api';
-import { API_URL } from '../config';
+
 const authService = {
   // Register user
   register: async (userData) => {
-    const response = await api.post(`${API_URL}/api/auth/register`, userData);
+    const response = await api.post('api/auth/register', userData);
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data));
@@ -13,7 +13,7 @@ const authService = {
 
   // Login user
   login: async (credentials) => {
-    const response = await api.post(`${API_URL}/api/auth/login`, credentials);
+    const response = await api.post('api/auth/login', credentials);
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data));
