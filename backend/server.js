@@ -4,29 +4,38 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 
-// Load env vars
+
 dotenv.config();
 
-// Connect to database
+
 connectDB();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://filmfinder-khaki.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+app.options("*", cors());
+
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/movies', require('./routes/movieRoutes'));
 
-// Health check route
+
 app.get('/', (req, res) => {
   res.json({ message: 'Movie API is running...' });
 });
 
-// Error handling
+
 app.use(notFound);
 app.use(errorHandler);
 
