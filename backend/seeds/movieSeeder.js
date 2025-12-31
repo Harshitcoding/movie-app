@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const path = require('path');
 const Movie = require('../models/Movie');
 
-dotenv.config();
+// Load .env from backend root directory
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const movies = [
   {
@@ -197,24 +199,21 @@ const movies = [
 const seedMovies = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGODB_URI);
 
     console.log('MongoDB Connected for seeding...');
 
-    // Clear existing movies (optional - comment out if you want to keep existing movies)
+    // Clear existing movies (optional - uncomment if you want to remove old data first)
     // await Movie.deleteMany({});
     // console.log('Existing movies cleared');
 
     // Insert movies
-    await Movie.insertMany(movies);
-    console.log(`✅ Successfully seeded ${movies.length} movies!`);
+    const insertedMovies = await Movie.insertMany(movies);
+    console.log(`✅ Successfully seeded ${insertedMovies.length} movies!`);
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding movies:', error);
+    console.error('❌ Error seeding movies:', error.message);
     process.exit(1);
   }
 };
