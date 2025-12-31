@@ -127,22 +127,22 @@ const getMovieById = async (req, res) => {
 // @access  Private/Admin
 const addMovie = async (req, res) => {
   try {
-    const movieData = req.body;
+    const movieData = { ...req.body }; // 🔥 CLONE THE DATA
 
-    // Add to queue for lazy insertion
     addToQueue(async () => {
-      const movie = await Movie.create(movieData);
-      return movie;
+      await Movie.create(movieData);  // 🔥 WILL NOW SAVE CORRECTLY
     });
 
-    res.status(201).json({ 
-      message: 'Movie added to queue for processing',
-      data: movieData 
+    res.status(201).json({
+      message: "Movie added to queue for processing",
+      data: movieData,
     });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // @desc    Update movie
 // @route   PUT /api/movies/:id
